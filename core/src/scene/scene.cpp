@@ -83,6 +83,13 @@ const Style* Scene::findStyle(const std::string& _name) const {
 
 }
 
+const DataLayer* Scene::findLayer(const std::string& _name) const {
+    for (auto& layer : m_layers) {
+        if (layer.name() == _name) { return &layer; }
+    }
+    return nullptr;
+}
+
 Style* Scene::findStyle(const std::string& _name) {
 
     for (auto& style : m_styles) {

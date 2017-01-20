@@ -4,6 +4,7 @@
 #include "gl/texture.h"
 #include "marker/marker.h"
 #include "scene/sceneLoader.h"
+#include "scene/dataLayer.h"
 #include "style/style.h"
 #include "labels/labelSet.h"
 #include "log.h"
@@ -300,6 +301,27 @@ bool MarkerManager::buildStyling(Marker& marker) {
     try {
         // Update the draw rule for the marker.
         YAML::Node node = YAML::Load(marker.stylingString());
+
+        // Check if marker styling defines a layer in the yaml scene
+        if (Node layer = node["layer"]) {
+            if (!layer.IsScalar()) {
+                LOGE("layer for marker styling needs to be a scalar value.");
+                return false;
+            }
+
+            const DataLayer* sceneLayer = m_scene->findLayer(layer.Scalar());
+            if (sceneLayer && !sceneLayer->rules().empty()) {
+                // select first drawRule from this layer's rules
+                auto rule = sceneLayer->rules().front();
+                marker.setDrawRule(std::make_unique<DrawRuleData>(rule.name, 0, rule.parameters));
+                return true;
+            } else {
+                LOGE("Layer: %s not found in the scene file.", layer.Scalar().c_str());
+                return false;
+            }
+        }
+
+        // marker styling has explicit draw rules defined
         SceneLoader::parseStyleParams(node, m_scene, "", params);
     } catch (YAML::Exception e) {
         LOG("Invalid marker styling '%s', %s",

@@ -98,6 +98,7 @@ public:
     const auto& featureSelection() const { return m_featureSelection; }
 
     const Style* findStyle(const std::string& _name) const;
+    const DataLayer* findLayer(const std::string& name) const;
     const Light* findLight(const std::string& _name) const;
 
     void updateTime(float _dt) { m_time += _dt; }
