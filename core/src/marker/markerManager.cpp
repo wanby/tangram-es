@@ -65,6 +65,17 @@ bool MarkerManager::setStyling(MarkerID markerID, const char* styling) {
     return buildGeometry(*marker, m_zoom);
 }
 
+bool MarkerManager::setDrawLayer(MarkerID markerID, const char* layerName) {
+    Marker* marker = getMarkerOrNull(markerID);
+    if (!marker) { return false; }
+
+    marker->setDrawLayer(layerName);
+
+    if (!buildStyling(*marker)) { return false; }
+
+    return buildGeometry(*marker, m_zoom);
+}
+
 bool MarkerManager::setBitmap(MarkerID markerID, int width, int height, const unsigned int* bitmapData) {
     Marker* marker = getMarkerOrNull(markerID);
     if (!marker) { return false; }
@@ -298,28 +309,19 @@ bool MarkerManager::buildStyling(Marker& marker) {
     if (!m_scene) { return false; }
 
     std::vector<StyleParam> params;
+
+    if (!marker.layerName().empty()) {
+        std::vector<const SceneLayer*> layers = m_scene->getLayerHierarchy(marker.layerName());
+        if (layers.empty()) {
+            return false;
+        }
+        return marker.setDrawRule(layers);
+    }
+
+    // if no layerName is specified, try setting draw rules from a stylingString
     try {
         // Update the draw rule for the marker.
         YAML::Node node = YAML::Load(marker.stylingString());
-
-        // Check if marker styling defines a layer in the yaml scene
-        if (Node layer = node["layer"]) {
-            if (!layer.IsScalar()) {
-                LOGE("layer for marker styling needs to be a scalar value.");
-                return false;
-            }
-
-            const DataLayer* sceneLayer = m_scene->findLayer(layer.Scalar());
-            if (sceneLayer && !sceneLayer->rules().empty()) {
-                // select first drawRule from this layer's rules
-                auto rule = sceneLayer->rules().front();
-                marker.setDrawRule(std::make_unique<DrawRuleData>(rule.name, 0, rule.parameters));
-                return true;
-            } else {
-                LOGE("Layer: %s not found in the scene file.", layer.Scalar().c_str());
-                return false;
-            }
-        }
 
         // marker styling has explicit draw rules defined
         SceneLoader::parseStyleParams(node, m_scene, "", params);

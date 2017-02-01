@@ -2,6 +2,7 @@
 
 #include "data/tileData.h"
 #include "gl/texture.h"
+#include "scene/dataLayer.h"
 #include "scene/drawRule.h"
 #include "scene/scene.h"
 #include "style/style.h"
@@ -32,13 +33,33 @@ void Marker::setStylingString(std::string stylingString) {
     m_stylingString = stylingString;
 }
 
-bool Marker::evaluateRuleForContext(StyleContext& ctx) {
-    return m_ruleSet->evaluateRuleForContext(*m_drawRule, ctx);
+void Marker::setDrawLayer(std::string layerName) {
+    m_layerName = layerName;
 }
 
-void Marker::setDrawRule(std::unique_ptr<DrawRuleData> drawRuleData) {
+bool Marker::evaluateRuleForContext(StyleContext& ctx) {
+    return m_ruleSet->evaluateRuleForContext(*drawRule(), ctx);
+}
+
+bool Marker::setDrawRule(std::unique_ptr<DrawRuleData> drawRuleData) {
+    // clear previous set
+    auto& drawRules = m_ruleSet->matchedRules();
+    drawRules.clear();
+
     m_drawRuleData = std::move(drawRuleData);
-    m_drawRule = std::make_unique<DrawRule>(*m_drawRuleData, "", 0);
+    drawRules.emplace_back(*m_drawRuleData, "", 0);
+    return true;
+}
+
+bool Marker::setDrawRule(const std::vector<const SceneLayer*>& layers) {
+    // clear previous set
+    auto& drawRules = m_ruleSet->matchedRules();
+    drawRules.clear();
+
+    m_ruleSet->mergeRules(layers);
+    if (drawRules.empty()) { return false; }
+
+    return true;
 }
 
 void Marker::setMesh(uint32_t styleId, uint32_t zoom, std::unique_ptr<StyledMesh> mesh) {
@@ -113,7 +134,11 @@ Feature* Marker::feature() const {
 }
 
 DrawRule* Marker::drawRule() const {
-    return m_drawRule.get();
+    if (m_ruleSet->matchedRules().empty()) { return nullptr; }
+
+    // NOTE: only use the first drawrule group to draw this marker
+    // TODO: Draw markers with multiple styles
+    return &m_ruleSet->matchedRules().front();
 }
 
 StyledMesh* Marker::mesh() const {
@@ -142,6 +167,10 @@ const glm::mat4& Marker::modelViewProjectionMatrix() const {
 
 const std::string& Marker::stylingString() const {
     return m_stylingString;
+}
+
+const std::string& Marker::layerName() const {
+    return m_layerName;
 }
 
 bool Marker::isEasing() const {

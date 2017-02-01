@@ -213,6 +213,11 @@ public:
     // updated, otherwise returns false.
     bool markerSetStyling(MarkerID _marker, const char* _styling);
 
+    // Set a scene layer for a marker object; _layerName is a layer in the scene being loaded. Draw
+    // rules specified in the layer will be applied for marker styling
+    // returns true if the marker ID was found and successfully updated, otherwise returns false.
+    bool markerSetDrawLayer(MarkerID _marker, const char* _layerName);
+
     // Set a bitmap to use as the image for a point marker; _data is a buffer of RGBA pixel data with
     // length of _width * _height; pixels are in row-major order beginning from the bottom-left of the
     // image; returns true if the marker ID was found and successfully updated, otherwise returns false.

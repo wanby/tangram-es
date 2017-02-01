@@ -83,11 +83,47 @@ const Style* Scene::findStyle(const std::string& _name) const {
 
 }
 
-const DataLayer* Scene::findLayer(const std::string& _name) const {
-    for (auto& layer : m_layers) {
-        if (layer.name() == _name) { return &layer; }
+std::vector<const SceneLayer*> Scene::getLayerHierarchy(const std::string& _name) const {
+
+    std::vector<const SceneLayer*> layers;
+
+    const std::string delimiter = ":";
+    std::string layerNames(_name);
+
+    auto pos = layerNames.find(delimiter);
+    auto origPos = pos;
+    std::string layerName;
+
+    while( pos != std::string::npos || !layerNames.empty()) {
+        if (pos != std::string::npos) {
+            layerName = _name.substr(0, origPos);
+        } else {
+            layerName = _name;
+        }
+        if (layers.empty()) {
+            for (auto& layer: m_layers) {
+                if (layer.name() == layerName) {
+                    layers.push_back(&layer);
+                    break;
+                }
+            }
+        } else {
+            for (auto& sublayer: layers.back()->sublayers()) {
+                if (sublayer.name() == layerName) {
+                    layers.push_back(&sublayer);
+                    break;
+                }
+            }
+        }
+
+        if (pos != std::string::npos) {
+            layerNames = layerNames.substr(pos + 1);
+            pos = layerNames.find(delimiter);
+            origPos += (pos + 1);
+        } else { break; }
     }
-    return nullptr;
+
+    return layers;
 }
 
 Style* Scene::findStyle(const std::string& _name) {

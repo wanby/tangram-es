@@ -32,6 +32,9 @@ public:
     // Set the styling string for a marker; returns true if the marker was found and updated.
     bool setStyling(MarkerID markerID, const char* styling);
 
+    // Set the layer name for a marker to use; returns true if the marker was found and updated.
+    bool setDrawLayer(MarkerID markerID, const char* layerName);
+
     bool setBitmap(MarkerID markerID, int width, int height, const unsigned int* bitmapData);
 
     // Set whether a marker should be visible; returns true if the marker was found and updated.

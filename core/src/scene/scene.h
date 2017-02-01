@@ -24,6 +24,7 @@ class FeatureSelection;
 class FontContext;
 class Light;
 class MapProjection;
+class SceneLayer;
 class SpriteAtlas;
 class Style;
 class Texture;
@@ -98,7 +99,9 @@ public:
     const auto& featureSelection() const { return m_featureSelection; }
 
     const Style* findStyle(const std::string& _name) const;
-    const DataLayer* findLayer(const std::string& name) const;
+
+    // fills the vector with the hierarchy of layers found in the name (delimited by ":")
+    std::vector<const SceneLayer*> getLayerHierarchy(const std::string& name) const;
     const Light* findLight(const std::string& _name) const;
 
     void updateTime(float _dt) { m_time += _dt; }

@@ -781,6 +781,12 @@ bool Map::markerSetStyling(MarkerID _marker, const char* _styling) {
     return success;
 }
 
+bool Map::markerSetDrawLayer(MarkerID _marker, const char* _layerName) {
+    bool success = impl->markerManager.setDrawLayer(_marker, _layerName);
+    platform->requestRender();
+    return success;
+}
+
 bool Map::markerSetBitmap(MarkerID _marker, int _width, int _height, const unsigned int* _data) {
     bool success = impl->markerManager.setBitmap(_marker, _width, _height, _data);
     platform->requestRender();
