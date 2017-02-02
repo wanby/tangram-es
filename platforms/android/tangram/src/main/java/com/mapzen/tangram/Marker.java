@@ -42,6 +42,17 @@ public class Marker {
     }
 
     /**
+     * Sets the sceneLayerName whose drawrules will be used to display either a point, polyline or polygon for this marker.
+     * This sceneLayer must be defined in the loaded scene file.
+     *
+     * @param sceneLayerName Scene Layer Name
+     * @return whether the sceneLayer was successfully set along with relevant draw rules
+     */
+    public boolean setDrawLayer(String sceneLayerName) {
+        return map.setMarkerDrawLayer(markerId, sceneLayerName);
+    }
+
+    /**
      * Sets the styling to be used to display either a point, polyline, or bitmap for this marker.
      * If the marker is going to be used to display a bitmap, a 'points' style must be set.
      *
