@@ -148,7 +148,7 @@
     // Add point marker
     {
         TGMapMarkerId mid = [vc markerAdd];
-        [vc markerSetStyling:mid styling:@"{ style: 'points', color: 'white', size: [25px, 25px], order:500, collide: false }"];
+        [vc markerSetDrawLayer:mid sceneLayerName:@"mz_search_result:inactive"];
         [vc markerSetPoint:mid coordinates:coordinate];
     }
 
