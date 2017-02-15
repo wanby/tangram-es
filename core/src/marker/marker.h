@@ -25,6 +25,13 @@ struct StyledMesh;
 
 class Marker {
 
+    struct Styling {
+        std::string styling;
+        bool isDrawGrpPath; // layer set vs explicit styling set
+        std::unique_ptr<DrawRuleMergeSet> drawRuleSet;
+        std::unique_ptr<DrawRuleData> drawRuleData;
+    };
+
 public:
 
     // Create an empty marker with the given ID. An ID of 0 indicates an invalid marker.
@@ -41,11 +48,8 @@ public:
     // Set the feature whose geometry will be used to build the marker.
     void setFeature(std::unique_ptr<Feature> feature);
 
-    // Set the string of YAML that will be used to style the marker.
-    void setStylingString(std::string stylingString);
-
-    // Set the scene layer to get draw rules for the marker
-    void setDrawLayer(std::string layerName);
+    // Sets the styling struct for the marker
+    void setStyling(std::string styling, bool isDrawGrpPath);
 
     // Set the draw rule that will be used to build the marker.
     bool setDrawRule(std::unique_ptr<DrawRuleData> drawRuleData);
@@ -107,8 +111,7 @@ public:
 
     const glm::mat4& modelViewProjectionMatrix() const;
 
-    const std::string& stylingString() const;
-    const std::string& layerName() const;
+    const Styling& styling() const { return m_styling; }
 
     bool evaluateRuleForContext(StyleContext& ctx);
 
@@ -124,12 +127,9 @@ protected:
 
     std::unique_ptr<Feature> m_feature;
     std::unique_ptr<StyledMesh> m_mesh;
-    std::unique_ptr<DrawRuleData> m_drawRuleData;
-    std::unique_ptr<DrawRuleMergeSet> m_ruleSet;
     std::unique_ptr<Texture> m_texture;
 
-    std::string m_stylingString;
-    std::string m_layerName;
+    Styling m_styling;
 
     MarkerID m_id = 0;
 

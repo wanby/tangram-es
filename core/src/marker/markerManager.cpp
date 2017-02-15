@@ -52,27 +52,16 @@ bool MarkerManager::remove(MarkerID markerID) {
     return false;
 }
 
-bool MarkerManager::setStyling(MarkerID markerID, const char* styling) {
+bool MarkerManager::setStyling(MarkerID markerID, const char* styling, bool isDrawGrpPath) {
     Marker* marker = getMarkerOrNull(markerID);
     if (!marker) { return false; }
 
-    marker->setStylingString(std::string(styling));
+    marker->setStyling(std::string(styling), isDrawGrpPath);
 
     // Create a draw rule from the styling string.
     if (!buildStyling(*marker)) { return false; }
 
     // Build the feature mesh for the marker's current geometry.
-    return buildGeometry(*marker, m_zoom);
-}
-
-bool MarkerManager::setDrawLayer(MarkerID markerID, const char* layerName) {
-    Marker* marker = getMarkerOrNull(markerID);
-    if (!marker) { return false; }
-
-    marker->setDrawLayer(layerName);
-
-    if (!buildStyling(*marker)) { return false; }
-
     return buildGeometry(*marker, m_zoom);
 }
 
@@ -310,24 +299,35 @@ bool MarkerManager::buildStyling(Marker& marker) {
 
     std::vector<StyleParam> params;
 
-    if (!marker.layerName().empty()) {
-        std::vector<const SceneLayer*> layers = m_scene->getLayerHierarchy(marker.layerName());
-        if (layers.empty()) {
+    const auto& markerStyling = marker.styling();
+    const char* delimiter = ":";
+
+    if (markerStyling.isDrawGrpPath) {
+        auto& drawGrpPath = markerStyling.styling;
+        if (!drawGrpPath.empty()) {
+            auto n = drawGrpPath.rfind(delimiter);
+            if (n == std::string::npos) { return false; }
+            auto layerPath = drawGrpPath.substr(0, n);
+            std::vector<const SceneLayer*> layers = m_scene->getLayerHierarchy(layerPath);
+            if (layers.empty()) {
+                return false;
+            }
+            return marker.setDrawRule(layers);
+        } else {
             return false;
         }
-        return marker.setDrawRule(layers);
     }
 
     // if no layerName is specified, try setting draw rules from a stylingString
     try {
         // Update the draw rule for the marker.
-        YAML::Node node = YAML::Load(marker.stylingString());
+        YAML::Node node = YAML::Load(markerStyling.styling);
 
         // marker styling has explicit draw rules defined
         SceneLoader::parseStyleParams(node, m_scene, "", params);
     } catch (YAML::Exception e) {
         LOG("Invalid marker styling '%s', %s",
-            marker.stylingString().c_str(), e.what());
+            markerStyling.styling.c_str(), e.what());
         return false;
     }
     // Compile any new JS functions used for styling.

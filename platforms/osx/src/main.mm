@@ -13,7 +13,7 @@ void init_main_window(bool recreate);
 
 std::string sceneFile = "scene.yaml";
 
-std::string markerStyling = "touch:point";
+std::string markerStyling = "touch:point:icons";
 std::string polylineStyle = "{ style: lines, interactive: true, color: red, width: 20px, order: 5000 }";
 
 GLFWwindow* main_window = nullptr;
@@ -95,7 +95,7 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
         if (!marker) {
             marker = map->markerAdd();
 
-            map->markerSetDrawLayer(marker, markerStyling.c_str());
+            map->markerSetLayerDrawGroup(marker, markerStyling.c_str());
             map->markerSetPoint(marker, p);
             map->markerSetDrawOrder(marker, mods);
             logMsg("Added marker with zOrder: %d\n", mods);

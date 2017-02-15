@@ -776,13 +776,13 @@ bool Map::markerSetPolygon(MarkerID _marker, LngLat* _coordinates, int* _counts,
 }
 
 bool Map::markerSetStyling(MarkerID _marker, const char* _styling) {
-    bool success = impl->markerManager.setStyling(_marker, _styling);
+    bool success = impl->markerManager.setStyling(_marker, _styling, false);
     platform->requestRender();
     return success;
 }
 
-bool Map::markerSetDrawLayer(MarkerID _marker, const char* _layerName) {
-    bool success = impl->markerManager.setDrawLayer(_marker, _layerName);
+bool Map::markerSetLayerDrawGroup(MarkerID _marker, const char* _drawGrpPath) {
+    bool success = impl->markerManager.setStyling(_marker, _drawGrpPath, true);
     platform->requestRender();
     return success;
 }

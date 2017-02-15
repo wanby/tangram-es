@@ -198,17 +198,18 @@ bool DrawRuleMergeSet::evaluateRuleForContext(DrawRule& rule, StyleContext& ctx)
     return valid;
 }
 
-void DrawRuleMergeSet::mergeRules(const std::vector<const SceneLayer*>& _layers) {
+void DrawRuleMergeSet::mergeRules(const std::vector<const SceneLayer*>& _layers, const std::string& drawGroupName) {
     for (auto layer: _layers) {
         mergeRules(*layer);
     }
 }
 
-void DrawRuleMergeSet::mergeRules(const SceneLayer& _layer) {
+void DrawRuleMergeSet::mergeRules(const SceneLayer& _layer, const std::string& drawGroupName) {
 
     size_t pos, end = m_matchedRules.size();
 
     for (const auto& rule : _layer.rules()) {
+        if (!drawGroupName.empty() && rule.name != drawGroupName) { continue; }
         for (pos = 0; pos < end; pos++) {
             if (m_matchedRules[pos].id == rule.id) { break; }
         }

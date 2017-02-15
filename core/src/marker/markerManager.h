@@ -29,11 +29,8 @@ public:
     // Try to remove the marker with the given ID; returns true if the marker was found and removed.
     bool remove(MarkerID markerID);
 
-    // Set the styling string for a marker; returns true if the marker was found and updated.
-    bool setStyling(MarkerID markerID, const char* styling);
-
-    // Set the layer name for a marker to use; returns true if the marker was found and updated.
-    bool setDrawLayer(MarkerID markerID, const char* layerName);
+    // Set the styling for a marker; returns true if the marker was found and updated.
+    bool setStyling(MarkerID markerID, const char* styling, bool isDrawGrpPath);
 
     bool setBitmap(MarkerID markerID, int width, int height, const unsigned int* bitmapData);
 
