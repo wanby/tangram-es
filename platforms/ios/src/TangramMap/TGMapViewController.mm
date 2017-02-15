@@ -302,11 +302,11 @@ __CG_STATIC_ASSERT(sizeof(TGGeoPoint) == sizeof(Tangram::LngLat));
     self.map->markerRemoveAll();
 }
 
-- (BOOL)markerSetDrawLayer:(TGMapMarkerId)identifier sceneLayerName:(NSString *)sceneLayerName
+- (BOOL)markerSetLayerDrawGroup:(TGMapMarkerId)identifier drawGroupPath:(NSString *)drawGroupPath
 {
     if (!self.map) { return NO; }
 
-    return self.map->markerSetDrawLayer(identifier, [sceneLayerName UTF8String]);
+    return self.map->markerSetLayerDrawGroup(identifier, [drawGroupPath UTF8String]);
 }
 
 - (BOOL)markerSetStyling:(TGMapMarkerId)identifier styling:(NSString *)styling

@@ -39,7 +39,7 @@ public class MainActivity extends Activity implements OnMapReadyCallback, TapRes
     LngLat lastTappedPoint;
     MapData markers;
 
-    String pointSceneLayer = "touch:point";
+    String pointSceneLayerDrawGrp = "touch:point:icons";
     ArrayList<Marker> pointMarkers = new ArrayList<Marker>();
 
     boolean showTileInfo = false;
@@ -133,7 +133,7 @@ public class MainActivity extends Activity implements OnMapReadyCallback, TapRes
             markers.addPolyline(line, props);
 
             Marker p = map.addMarker();
-            p.setDrawLayer(pointSceneLayer);
+            p.setLayerDrawGroup(pointSceneLayerDrawGrp);
             p.setPoint(tappedPoint);
             pointMarkers.add(p);
         }

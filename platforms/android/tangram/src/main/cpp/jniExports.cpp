@@ -273,11 +273,11 @@ extern "C" {
         return result;
     }
 
-    JNIEXPORT bool JNICALL Java_com_mapzen_tangram_MapController_nativeMarkerSetDrawLayer(JNIEnv* jniEnv, jobject obj, jlong mapPtr, jlong markerID, jstring sceneLayerName) {
+    JNIEXPORT bool JNICALL Java_com_mapzen_tangram_MapController_nativeMarkerSetLayerDrawGroup(JNIEnv* jniEnv, jobject obj, jlong mapPtr, jlong markerID, jstring drawGrpPath) {
         assert(mapPtr > 0);
         auto map = reinterpret_cast<Tangram::Map*>(mapPtr);
-        auto layerName = stringFromJString(jniEnv, sceneLayerName);
-        auto result = map->markerSetDrawLayer(static_cast<unsigned int>(markerID), layerName.c_str());
+        auto layerName = stringFromJString(jniEnv, drawGrpPath);
+        auto result = map->markerSetLayerDrawGroup(static_cast<unsigned int>(markerID), layerName.c_str());
         return result;
     }
 

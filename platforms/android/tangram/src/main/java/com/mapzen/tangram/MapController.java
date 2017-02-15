@@ -902,10 +902,10 @@ public class MapController implements Renderer {
         return updateStrings;
     }
 
-    boolean setMarkerDrawLayer(long markerId, String sceneLayerName) {
+    boolean setMarkerLayerDrawGroup(long markerId, String drawGrpPath) {
         checkPointer(mapPointer);
         checkId(markerId);
-        return nativeMarkerSetDrawLayer(mapPointer, markerId, sceneLayerName);
+        return nativeMarkerSetLayerDrawGroup(mapPointer, markerId, drawGrpPath);
     }
 
     boolean setMarkerStyling(long markerId, String styleStr) {
@@ -1008,7 +1008,7 @@ public class MapController implements Renderer {
     private synchronized native void nativePickMarker(MapController instance, long mapPtr, float posX, float posY, MarkerPickListener listener);
     private synchronized native long nativeMarkerAdd(long mapPtr);
     private synchronized native boolean nativeMarkerRemove(long mapPtr, long markerID);
-    private synchronized native boolean nativeMarkerSetDrawLayer(long mapPtr, long markerID, String sceneLayerName);
+    private synchronized native boolean nativeMarkerSetLayerDrawGroup(long mapPtr, long markerID, String sceneLayerName);
     private synchronized native boolean nativeMarkerSetStyling(long mapPtr, long markerID, String styling);
     private synchronized native boolean nativeMarkerSetBitmap(long mapPtr, long markerID, int width, int height, int[] data);
     private synchronized native boolean nativeMarkerSetPoint(long mapPtr, long markerID, double lng, double lat);

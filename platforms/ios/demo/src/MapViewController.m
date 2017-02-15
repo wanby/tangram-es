@@ -148,7 +148,7 @@
     // Add point marker
     {
         TGMapMarkerId mid = [vc markerAdd];
-        [vc markerSetDrawLayer:mid sceneLayerName:@"mz_search_result:inactive"];
+        [vc markerSetLayerDrawGroup:mid drawGroupPath:@"mz_search_result:inactive:ux-icons-overlay"];
         [vc markerSetPoint:mid coordinates:coordinate];
     }
 

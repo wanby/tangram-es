@@ -42,17 +42,24 @@ public class Marker {
     }
 
     /**
-     * Sets the sceneLayerName whose drawrules will be used to display either a point, polyline or polygon for this marker.
-     * This sceneLayer must be defined in the loaded scene file.
+     * Used to style the marker
+     * Sets draw rules from a draw group of a scene layer in the scene file, used to load the scene.
+     * This draw group must be defined in the loaded scene file.
      *
-     * @param sceneLayerName Scene Layer Name
-     * @return whether the sceneLayer was successfully set along with relevant draw rules
+     * <ul>
+     * <li>parentLayer:childLayer:drawGroup</li>
+     * <li>sceneLayer:drawGroup2</li>
+     * </ul>
+     *
+     * @param drawGrpPath Absolute path of a draw group under scene layer(s) delimited with ":"
+     * @return whether the layer drawGroup was successfully set along with relevant draw rules
      */
-    public boolean setDrawLayer(String sceneLayerName) {
-        return map.setMarkerDrawLayer(markerId, sceneLayerName);
+    public boolean setLayerDrawGroup(String drawGrpPath) {
+        return map.setMarkerLayerDrawGroup(markerId, drawGrpPath);
     }
 
     /**
+     * Used to style the marker
      * Sets the styling to be used to display either a point, polyline, or bitmap for this marker.
      * If the marker is going to be used to display a bitmap, a 'points' style must be set.
      *
