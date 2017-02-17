@@ -307,10 +307,18 @@ bool MarkerManager::buildStyling(Marker& marker) {
         auto& drawGrpPath = markerStyling.styling;
         if (!drawGrpPath.empty()) {
 
-            auto n = drawGrpPath.rfind(LAYER_DELIMITER);
+            //check for layers
+            const std::string LAYERS = "layers";
+            if (drawGrpPath.substr(0, LAYERS.length()) != LAYERS) { return false; }
+
+            //check for draw
+            const std::string DRAW = LAYER_DELIMITER + "draw" + LAYER_DELIMITER;
+            auto n = drawGrpPath.find(DRAW);
             if (n == std::string::npos) { return false; }
 
             auto layerPath = drawGrpPath.substr(0, n);
+
+            LOG("layerPath: %s" , layerPath.c_str());
             // Replace the rule delimiter with scene's DELIMITER to extract sublayer
             std::replace(layerPath.begin(), layerPath.end(), LAYER_DELIMITER[0], DELIMITER[0]);
 
