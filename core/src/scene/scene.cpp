@@ -87,10 +87,10 @@ std::vector<const SceneLayer*> Scene::getLayerHierarchy(const std::string& _name
 
     std::vector<const SceneLayer*> layers;
 
-    const std::string delimiter = ":";
     std::string layerNames(_name);
 
-    auto pos = layerNames.find(delimiter);
+    // Use the DELIMITER defined in the scene.h to extract out sublayer names
+    auto pos = layerNames.find(DELIMITER);
     auto origPos = pos;
     std::string layerName;
 
@@ -118,7 +118,7 @@ std::vector<const SceneLayer*> Scene::getLayerHierarchy(const std::string& _name
 
         if (pos != std::string::npos) {
             layerNames = layerNames.substr(pos + 1);
-            pos = layerNames.find(delimiter);
+            pos = layerNames.find(DELIMITER);
             origPos += (pos + 1);
         } else { break; }
     }

@@ -10,6 +10,8 @@
 #include "log.h"
 #include "selection/featureSelection.h"
 
+#include <algorithm>
+
 namespace Tangram {
 
 void MarkerManager::setScene(std::shared_ptr<Scene> scene) {
@@ -300,14 +302,18 @@ bool MarkerManager::buildStyling(Marker& marker) {
     std::vector<StyleParam> params;
 
     const auto& markerStyling = marker.styling();
-    const char* delimiter = ":";
 
     if (markerStyling.isDrawGrpPath) {
         auto& drawGrpPath = markerStyling.styling;
         if (!drawGrpPath.empty()) {
-            auto n = drawGrpPath.rfind(delimiter);
+
+            auto n = drawGrpPath.rfind(LAYER_DELIMITER);
             if (n == std::string::npos) { return false; }
+
             auto layerPath = drawGrpPath.substr(0, n);
+            // Replace the rule delimiter with scene's DELIMITER to extract sublayer
+            std::replace(layerPath.begin(), layerPath.end(), LAYER_DELIMITER[0], DELIMITER[0]);
+
             std::vector<const SceneLayer*> layers = m_scene->getLayerHierarchy(layerPath);
             if (layers.empty()) {
                 return false;

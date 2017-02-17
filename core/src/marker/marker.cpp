@@ -54,15 +54,7 @@ bool Marker::setDrawRule(const std::vector<const SceneLayer*>& layers) {
     auto& drawRules = m_styling.drawRuleSet->matchedRules();
     drawRules.clear();
 
-    const char* delimiter = ":";
-
-    auto n = m_styling.styling.rfind(delimiter);
-    if (n == std::string::npos) { return false; }
-
-    auto drawRuleGrp = m_styling.styling.substr(n+1);
-
-    // merge rules for "drawRuleGrp" from all layers
-    m_styling.drawRuleSet->mergeRules(layers, drawRuleGrp);
+    m_styling.drawRuleSet->mergeRules(layers);
     if (drawRules.empty()) { return false; }
 
     return true;
@@ -140,10 +132,21 @@ Feature* Marker::feature() const {
 }
 
 DrawRule* Marker::drawRule() const {
-    if (m_styling.drawRuleSet->matchedRules().empty()) { return nullptr; }
+    auto& matchedRules = m_styling.drawRuleSet->matchedRules();
+
+    if (matchedRules.empty()) { return nullptr; }
+    if (!m_styling.isDrawGrpPath) { return &matchedRules.front(); }
+
+    auto n = m_styling.styling.rfind(LAYER_DELIMITER);
+    if (n == std::string::npos) { return nullptr; }
+    auto drawRuleGrp = m_styling.styling.substr(n+1);
 
     // TODO: Draw markers with multiple styles
-    return &m_styling.drawRuleSet->matchedRules().front();
+    for (auto& matchedRule : matchedRules) {
+        if (*(matchedRule.name) == drawRuleGrp) {
+            return &matchedRule;
+        }
+    }
 }
 
 StyledMesh* Marker::mesh() const {

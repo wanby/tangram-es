@@ -39,7 +39,7 @@ public class MainActivity extends Activity implements OnMapReadyCallback, TapRes
     LngLat lastTappedPoint;
     MapData markers;
 
-    String pointSceneLayerDrawGrp = "touch:point:icons";
+    String pointSceneLayerDrawGrp = "touch.point.icons";
     ArrayList<Marker> pointMarkers = new ArrayList<Marker>();
 
     boolean showTileInfo = false;

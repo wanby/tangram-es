@@ -13,7 +13,7 @@ void init_main_window(bool recreate);
 
 std::string sceneFile = "scene.yaml";
 
-std::string markerStyling = "touch:point:icons";
+std::string markerStyling = "touch.point.icons";
 std::string polylineStyle = "{ style: lines, interactive: true, color: red, width: 20px, order: 5000 }";
 
 GLFWwindow* main_window = nullptr;

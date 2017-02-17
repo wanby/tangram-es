@@ -31,6 +31,8 @@ class Texture;
 class TileSource;
 struct Stops;
 
+// Delimiter used in sceneloader for style params and layer-sublayer naming
+const std::string DELIMITER = ":";
 
 /* Singleton container of <Style> information
  *

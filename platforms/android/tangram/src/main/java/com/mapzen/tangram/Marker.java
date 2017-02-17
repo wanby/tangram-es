@@ -51,7 +51,7 @@ public class Marker {
      * <li>sceneLayer:drawGroup2</li>
      * </ul>
      *
-     * @param drawGrpPath Absolute path of a draw group under scene layer(s) delimited with ":"
+     * @param drawGrpPath Absolute path of a draw group under scene layer(s) delimited with "."
      * @return whether the layer drawGroup was successfully set along with relevant draw rules
      */
     public boolean setLayerDrawGroup(String drawGrpPath) {

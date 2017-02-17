@@ -23,6 +23,8 @@ struct DrawRuleData;
 struct Feature;
 struct StyledMesh;
 
+const std::string LAYER_DELIMITER = ".";
+
 class Marker {
 
     struct Styling {

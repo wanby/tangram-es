@@ -125,12 +125,10 @@ public:
     bool match(const Feature& _feature, const SceneLayer& _layer, StyleContext& _ctx);
 
     // internal
-    // Biased for drawGroupName (if one exists)
-    void mergeRules(const SceneLayer& _layer, const std::string& drawGroupName = "");
+    void mergeRules(const SceneLayer& _layer);
 
     // merge rules for each layer in `_layers` in order of occurance
-    // Biased for drawGroupName (if one exists)
-    void mergeRules(const std::vector<const SceneLayer*>& _layers, const std::string& drawGroupName = "");
+    void mergeRules(const std::vector<const SceneLayer*>& _layers);
 
     auto& matchedRules() { return m_matchedRules; }
 

@@ -417,7 +417,7 @@ NS_ASSUME_NONNULL_BEGIN
  Sets the styling for a marker identifier.
 
  @param identifier the marker identifier created with `-markerAdd`
- @param drawGroupPath Absolute path of a draw group under scene layer(s) delimited with ":"
+ @param drawGroupPath Absolute path of a draw group under scene layer(s) delimited with "."
  @return `YES` if this operation was successful, `NO` otherwise
 
  @note It is possible to update the marker styling multiple times.<br>
