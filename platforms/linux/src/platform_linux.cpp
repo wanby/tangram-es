@@ -20,6 +20,8 @@
 #define FONT_JA "fonts/DroidSansJapanese.ttf"
 #define FALLBACK "fonts/DroidSansFallback.ttf"
 
+namespace Tangram {
+
 void logMsg(const char* fmt, ...) {
     va_list args;
     va_start(args, fmt);
@@ -81,3 +83,5 @@ void initGLExtensions() {
     // no-op
 #endif
 }
+
+} // namespace Tangram
