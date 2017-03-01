@@ -19,7 +19,7 @@
 
 @end
 
-static inline void tangramProperties(FeatureProperties* properties, Tangram::Properties& tgProperties)
+static inline void tangramProperties(TGFeatureProperties* properties, Tangram::Properties& tgProperties)
 {
     for (NSString* key in properties) {
         NSString* value = [properties objectForKey:key];
@@ -42,7 +42,7 @@ static inline void tangramProperties(FeatureProperties* properties, Tangram::Pro
     return self;
 }
 
-- (void)addPoint:(TGGeoPoint)coordinates withProperties:(FeatureProperties *)properties
+- (void)addPoint:(TGGeoPoint)coordinates withProperties:(TGFeatureProperties *)properties
 {
     if (!self.mapView) {
         return;
@@ -55,7 +55,7 @@ static inline void tangramProperties(FeatureProperties* properties, Tangram::Pro
     dataSource->addPoint(tgProperties, lngLat);
 }
 
-- (void)addPolygon:(TGGeoPolygon *)polygon withProperties:(FeatureProperties *)properties
+- (void)addPolygon:(TGGeoPolygon *)polygon withProperties:(TGFeatureProperties *)properties
 {
     if (!self.mapView) {
         return;
@@ -84,7 +84,7 @@ static inline void tangramProperties(FeatureProperties* properties, Tangram::Pro
     dataSource->addPoly(tgProperties, tgPolygon);
 }
 
-- (void)addPolyline:(TGGeoPolyline *)polyline withProperties:(FeatureProperties *)properties
+- (void)addPolyline:(TGGeoPolyline *)polyline withProperties:(TGFeatureProperties *)properties
 {
     if (!self.mapView) {
         return;
